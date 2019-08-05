@@ -3,7 +3,7 @@ const express = require('express');
 const morgan = require('morgan');
 const helmet = require('helmet');
 const cors = require('cors');
-console.log(process.env.API_TOKEN);
+
 const app = express();
 const digimon = require('./database/digimon-database');
 
