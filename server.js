@@ -7,7 +7,8 @@ const cors = require('cors');
 const app = express();
 const digimon = require('./database/digimon-database');
 
-app.use(morgan('dev'));
+const morganSetting = process.env.NODE_ENV === 'production'? 'tiny': 'dev'; 
+app.use(morgan(morganSetting));
 app.use(helmet());
 app.use(cors());
 
@@ -61,6 +62,20 @@ app.get('/digimon', (req, res)=>{
 })
 
 
+//===========================================error handler
+app.use((error, req, res, next)=> {
+  let response;
+  if(process.env.NODE_ENV === 'production'){
+    response = { error: { message: 'server error' } }
+  }
+  else {
+    response = { error }
+  }
+
+  res.status(500).json(response);
+
+})
+//===========================================error handler
 
 
 app.get('/digimon/all', (req,res)=>{
@@ -74,7 +89,7 @@ app.get('/digimon/all', (req,res)=>{
 
 
 
-const PORT = 8000;
+const PORT = process.env.PORT || 8000;
 app.listen(PORT, ()=>{
-  console.log(`Server is listening to PORT ${8000} `);
+  console.log(`Server is listening to PORT secret `);
 })
